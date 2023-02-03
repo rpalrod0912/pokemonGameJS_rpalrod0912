@@ -18,10 +18,11 @@
     <template v-if="mostrarResp">
       <h2 class="fade-in">{{ msj }}</h2>
       <button @click="nuevoJuego(this.tipo)">
-        {{ tipo ? "Siguiente Pokemon" : "Nueva Partida" }}
+        {{ this.intentos > 0 ? "Siguiente Pokemon" : "Nueva Partida" }}
       </button>
     </template>
     <h1>Tu puntuacion:{{ this.puntuacion }}</h1>
+    <h1>Tus intentos:{{ this.intentos }}</h1>
   </div>
 </template>
 
@@ -45,6 +46,7 @@ export default {
       //Booleano tipo para verificar si el jugador a acertado o ha fallado
       tipo: false,
       descripcionPokemon: "",
+      intentos: 4,
     };
   },
   methods: {
@@ -85,14 +87,17 @@ export default {
         this.puntuacion += 1;
       } else {
         this.msj = `Mal!!!, era ${this.pokemon.name}`;
-        this.tipo = false;
+        this.intentos -= 1;
       }
     },
     //Añadido Sistema de puntuacion si variable tipo false reseteamos contador
     nuevoJuego(tipo) {
-      if (!tipo) {
+      if (this.intentos === 0) {
         this.puntuacion = 0;
+        this.tipo = false;
+        this.intentos = 4;
       }
+
       (this.showPkm = false),
         (this.mostrarResp = false),
         (this.pkmnsArr = []),
