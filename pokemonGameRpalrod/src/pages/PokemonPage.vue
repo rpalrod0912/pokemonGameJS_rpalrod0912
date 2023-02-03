@@ -10,10 +10,11 @@
     <h2 v-if="tipo">
       {{ this.descripcionPokemon }}
     </h2>
-    <div v-if="!tipo">
+    <div v-if="!click">
       <PokemonOptions
         :pokemons="pkmnsArr"
         @selection="verificarRes"
+        @click="this.click = true"
       ></PokemonOptions>
     </div>
     <template v-if="mostrarResp">
@@ -26,9 +27,7 @@
     <h1>Tus intentos:{{ this.intentos }}</h1>
     <div v-if="!tipo">
       <button @click="mostrarPista = true">Dame una pista</button>
-      <h2 v-if="mostrarPista">
-        {{ this.pista }}
-      </h2>
+      <h2 v-if="mostrarPista">La Pista es: {{ this.pista }}</h2>
     </div>
   </div>
 </template>
@@ -56,6 +55,7 @@ export default {
       intentos: 4,
       mostrarPista: false,
       pista: "",
+      click: false,
     };
   },
   methods: {
@@ -124,7 +124,8 @@ export default {
         (this.tipo = false),
         (this.descripcionPokemon = ""),
         (this.mostrarPista = false),
-        (this.pista = "");
+        (this.pista = ""),
+        (this.click = false);
     },
   },
   mounted() {
