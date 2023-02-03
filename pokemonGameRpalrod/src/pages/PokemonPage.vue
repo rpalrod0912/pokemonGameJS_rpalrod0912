@@ -10,11 +10,12 @@
     <h2 v-if="tipo">
       {{ this.descripcionPokemon }}
     </h2>
-    <PokemonOptions
-      :pokemons="pkmnsArr"
-      @selection="verificarRes"
-    ></PokemonOptions>
-
+    <div v-if="!tipo">
+      <PokemonOptions
+        :pokemons="pkmnsArr"
+        @selection="verificarRes"
+      ></PokemonOptions>
+    </div>
     <template v-if="mostrarResp">
       <h2 class="fade-in">{{ msj }}</h2>
       <button @click="nuevoJuego(this.tipo)">
@@ -23,6 +24,12 @@
     </template>
     <h1>Tu puntuacion:{{ this.puntuacion }}</h1>
     <h1>Tus intentos:{{ this.intentos }}</h1>
+    <div v-if="!tipo">
+      <button @click="mostrarPista = true">Dame una pista</button>
+      <h2 v-if="mostrarPista">
+        {{ this.pista }}
+      </h2>
+    </div>
   </div>
 </template>
 
@@ -47,6 +54,8 @@ export default {
       tipo: false,
       descripcionPokemon: "",
       intentos: 4,
+      mostrarPista: false,
+      pista: "",
     };
   },
   methods: {
@@ -60,12 +69,21 @@ export default {
         datosPkmn.data.flavor_text_entries.filter(
           (element) => element.language.name === "es"
         );
+
       const flavorTextEntry =
         filteredFlavorTextEntries.length > 0
           ? filteredFlavorTextEntries[0]
           : {};
       const flavorText = flavorTextEntry.flavor_text;
+      const filteredPista = datosPkmn.data.genera.filter(
+        (element) => element.language.name === "es"
+      );
+      const filteredPistaEntry =
+        filteredPista.length > 0 ? filteredPista[0] : {};
+      const pistaFiltrada = filteredPistaEntry.genus;
+
       this.descripcionPokemon = flavorText;
+      this.pista = pistaFiltrada;
     },
 
     async mixedPkmArr() {
@@ -104,7 +122,9 @@ export default {
         this.mixedPkmArr(),
         (this.pokemon = null),
         (this.tipo = false),
-        (this.descripcionPokemon = "");
+        (this.descripcionPokemon = ""),
+        (this.mostrarPista = false),
+        (this.pista = "");
     },
   },
   mounted() {
