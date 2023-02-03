@@ -1,6 +1,7 @@
 <template>
   <h1 v-if="!pokemon">Cargando...</h1>
   <div v-else="pokemon">
+    <h1>Tu puntuacion:{{ this.puntuacion }}</h1>
     <h1>¿Cuál es este Pokémon?</h1>
 
     <PokemonPicture
@@ -15,7 +16,7 @@
 
     <template v-if="mostrarResp">
       <h2 class="fade-in">{{ msj }}</h2>
-      <button @click="nuevoJuego">Empezar de Nuevo</button>
+      <button @click="nuevoJuego(this.tipo)">Empezar de Nuevo</button>
     </template>
   </div>
 </template>
@@ -34,6 +35,9 @@ export default {
       showPkm: false,
       mostrarResp: false,
       msj: "",
+      puntuacion: 0,
+      comenzarDeNuevo: false,
+      tipo: false,
     };
   },
   methods: {
@@ -49,11 +53,17 @@ export default {
 
       if (selectId === this.pokemon.id) {
         this.msj = `Bien!!, era ${this.pokemon.name}`;
+        this.tipo = true;
+        this.puntuacion += 1;
       } else {
         this.msj = `Mal!!!, era ${this.pokemon.name}`;
+        this.tipo = false;
       }
     },
-    nuevoJuego() {
+    nuevoJuego(tipo) {
+      if (!tipo) {
+        this.puntuacion = 0;
+      }
       (this.showPkm = false),
         (this.mostrarResp = false),
         (this.pkmnsArr = []),
