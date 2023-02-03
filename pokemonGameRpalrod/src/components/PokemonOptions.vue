@@ -1,16 +1,20 @@
 <template>
   <div class="options-container">
     <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
+      <li v-for="pkm in pkmns" :key="pkmn.id">{{ pkmn.name }}</li>
     </ul>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    pokemons: {
+      type: Array,
+      requried: true,
+    },
+  },
+};
 </script>
 
 <style scoped>
